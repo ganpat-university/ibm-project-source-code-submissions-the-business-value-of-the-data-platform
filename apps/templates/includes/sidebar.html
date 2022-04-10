@@ -1,0 +1,46 @@
+
+	<!-- [ navigation menu ] start -->
+	<nav class="pcoded-navbar menupos-fixed menu-light ">
+		<div class="navbar-wrapper  ">
+			<div class="navbar-content scroll-div " >
+				<ul class="nav pcoded-inner-navbar ">
+					<li class="nav-item pcoded-menu-caption">
+						<label>Navigation</label>
+					</li>
+					<li class="nav-item">
+					    <a href="{% url 'home' %}" class="nav-link ">
+                            <span class="pcoded-micon">
+                                <i class="feather icon-home"></i>
+							</span>
+							<span class="pcoded-mtext">Dashboard</span>
+						</a>
+					</li>
+					<li class="nav-item">
+					    <a href="{% url 'index' %}" class="nav-link ">
+                            <span class="pcoded-micon">
+                                <i class="feather icon-activity"></i>
+							</span>
+							<span class="pcoded-mtext">Dynamic Dashboard</span>
+						</a>
+					</li>
+					<li class="nav-item">
+					    <a href="{% url 'register_complaint' %}" class="nav-link ">
+                            <span class="pcoded-micon">
+                                <i class="feather icon-file-plus"></i>
+							</span>
+							<span class="pcoded-mtext">Register Complaint</span>
+						</a>
+					</li>
+					<li class="nav-item pcoded-menu-caption">
+						<label>Action zone</label>
+					</li>
+					<li class="nav-item">
+					    <a href="{% url 'logout' %}" 
+						   class="nav-link "><span class="pcoded-micon">
+						   <i class="feather icon-log-out"></i></span><span class="pcoded-mtext">Logout</span></a>
+					</li>
+				</ul>				
+			</div>
+		</div>
+	</nav>
+    <!-- [ navigation menu ] end -->

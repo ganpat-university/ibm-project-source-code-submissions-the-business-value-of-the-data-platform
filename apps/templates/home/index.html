@@ -1,0 +1,190 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {{ Name }}{% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}	
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">Dashboard Analytics</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'index' %}">Dynamic Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'register_complaint' %}">Register Complaint</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <div class="col-md-12">
+                    {% if user.is_authenticated %}
+                        <p>Welcome, {{ user.get_username }}.</p>
+                    {% else %}
+                        <p>Welcome, new user. Please log in.</p>
+                    {% endif %}
+                </div>
+                <!-- order-card start -->
+                <div class="col-md-6 col-xl-3">
+                    <div class="card bg-c-blue order-card">
+                        <div class="card-body">
+                            <h6 class="text-center text-white">Total Complains</h6>
+                            <h2 class="text-center text-white"></i><span>{{complaint_count}}</span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="card bg-c-green order-card">
+                        <div class="card-body">
+                            <h6 class="text-center text-white">Total states</h6>
+                            <h2 class="text-center text-white"><span>{{state_count}}</span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <script>
+                        var line_graph_d = '{{line_graph | safe}}'
+                        line_graph_d = JSON.parse(line_graph_d)
+                        
+                        var line_graph_month_d = '{{line_graph_month | safe}}'
+                        line_graph_month_d = JSON.parse(line_graph_month_d)
+
+                        var customer_disputed_count_Yes = '{{customer_disputed_count_Yes}}'
+                        var customer_disputed_count_No = '{{customer_disputed_count_No}}'
+
+                        var customer_timely_responded_Yes = '{{customer_timely_responded_Yes}}'
+                        var customer_timely_responded_No = '{{customer_timely_responded_No}}'
+
+                        var group_product_count = '{{group_product_count | safe}}'
+                        group_product_count = JSON.parse(group_product_count)
+                    </script>
+                </div>
+                <!-- order-card end -->
+                <!-- users visite start -->
+                <div class="col-md-12 col-xl-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Complain Location</h5>
+                        </div>
+                        <div class="card-body pl-0 pb-0">
+                            <div class="d-flex justify-content-end">
+                                <select id="complaint_state_select" class="form-group mx-3 col-md-3">
+                                    {% for state in state_list %}
+                                        <option value="{{state}}">{{state}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div id="unique-visitor-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body bg-c-blue">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <span>Customers <br/> Disputed</span>
+                                        </div>
+                                        <div class="col text-right">
+                                            <h2 class="mb-0 text-white">{{customer_disputed_count_No|add:customer_disputed_count_Yes}}</h2>
+                                        </div>
+                                    </div>
+                                    <div id="customer-chart1"></div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <h3 class="m-0 text-white"><i class="fas fa-circle f-10 m-r-5 text-success"></i>{{customer_disputed_count_Yes}}</h3>
+                                            <span class="ml-3">Yes</span>
+                                        </div>
+                                        <div class="col">
+                                            <h3 class="m-0 text-white"><i class="fas fa-circle f-10 m-r-5 text-white"></i>{{customer_disputed_count_No}}</h3>
+                                            <span class="ml-3">No</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body bg-white">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <span>Customers <br/> Timely <br/> Responsed</span>
+                                        </div>
+                                        <div class="col text-right">
+                                            <h2 class="mb-0">{{customer_timely_responded_No|add:customer_timely_responded_Yes}}</h2>
+                                        </div>
+                                    </div>
+                                    <div id="customer-chart"></div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <h4 class="m-0"><i class="fas fa-circle f-10 m-r-5 text-success"></i>{{customer_timely_responded_Yes}}</h4>
+                                            <span class="ml-3">Yes</span>
+                                        </div>
+                                        <div class="col">
+                                            <h4 class="m-0"><i class="fas fa-circle text-primary f-10 m-r-5"></i>{{customer_timely_responded_No}}</h4>
+                                            <span class="ml-3">No</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Sample Bar Chart</h5>
+                        </div>
+                        <div class="card-body pl-0 pb-0">
+                            <div id="bar-chart"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-12 col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Sample Box Plot</h5>
+                        </div>
+                        <div class="card-body pl-0 pb-0">
+                            <div id="boxplot-chart"></div>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- users visite end -->
+            </div>
+            <!-- [ Main Content ] end -->
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <!-- Apex Chart -->
+    <script src="/static/assets/js/plugins/apexcharts.min.js"></script>
+    <!-- custom-chart js -->
+    <script src="/static/assets/js/pages/dashboard-main.js"></script>
+    <!-- <script src="/static/assets/js/custom/boxplot.js"></script> -->
+    <script src="/static/assets/js/custom/barchart.js"></script>
+    <script src="/static/assets/js/custom/fetch_state_data.js"></script>
+
+{% endblock javascripts %}
+
